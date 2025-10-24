@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>考試場次代碼</title>
+  <style>
+    body {
+      font-family: "Segoe UI", "微軟正黑體", sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f3f4f6;
+      margin: 0;
+    }
+    .title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    .code-box {
+      font-size: 2rem;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      color: #333;
+      user-select: all;
+      margin-bottom: 1rem;
+    }
+    .copy-btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    .copy-btn:hover {
+      background-color: #1d4ed8;
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="title" id="examName">考試代碼</div>
+  <div class="code-box" id="codeText">NOCODE</div>
+  <button class="copy-btn" id="copyBtn">點我複製代碼</button>
+
+  <div class="toast" id="toast">已複製場次代碼</div>
+
+  <script>
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 5000);
+    }
+
+    function copyCode() {
+      const codeText = document.getElementById('codeText').innerText;
+      navigator.clipboard.writeText(codeText)
+        .then(() => showToast())
+        .catch(err => console.error('無法複製：', err));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const examType = params.get('examType');
+
+      const examNameEl = document.getElementById('examName');
+      const codeTextEl = document.getElementById('codeText');
+
+      // 根據 examType 設定內容
+      let examName = '考試代碼';
+      let code = 'NOCODE';
+
+      if (examType === '1') {
+        examName = '教學部員任用考試場次代碼';
+        code = '20250808135017_68O6V9WO3L';
+      } else if (examType === '2') {
+        examName = '教學部員進修考試場次代碼';
+        code = '20250814000100_P7P8PMRRZY';
+      }
+
+      examNameEl.innerText = examName;
+      codeTextEl.innerText = code;
+
+      // 自動複製
+      copyCode();
+
+      // 按鈕手動複製
+      document.getElementById('copyBtn').addEventListener('click', copyCode);
+    });
+  </script>
+
+</body>
+</html>
